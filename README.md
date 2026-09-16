@@ -4,7 +4,7 @@ A full-stack blogging web application developed using Node.js, Express, EJS and 
 
 ## Demo
 
-[Add a screenshot or demo GIF/video here]
+https://github.com/user-attachments/assets/f789e05f-deb4-4244-91b5-199ecd182651
 
 ## About
 
@@ -45,7 +45,8 @@ The application uses a relational SQLite database containing tables for users, b
 
 Relationships between the tables are implemented using primary and foreign keys. A junction table, `article_tags`, is used to represent the many-to-many relationship between articles and tags.
 
-[Add database diagram here]
+<img width="771" height="874" alt="image" src="https://github.com/user-attachments/assets/90b92c93-588c-4079-a843-1f665fa97e31" />
+
 
 ### Tagging & Search System
 
