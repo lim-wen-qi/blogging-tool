@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Reader Home</title>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <a href="/reader/home">
+                <img src="/images/logo.png" alt="Logo" class="logo">
+            </a>
+        
+            <div class="header-right">
+                <p style="text-align: right; white-space: nowrap;">Hello, <%= username %></p>
+        
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <img src="/images/menu-button.png" alt="Menu" class="menu-icon">
+                    </button>
+        
+                    <div class="dropdown-content">
+                        <a href="/reader/settings" class="dropdown-item">Settings</a>
+                        <a href="/" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr class="line">
+    </header>
+    <br>
+    <form action="/reader/search" method="GET" class="center">
+        <input type="text" name="tag" placeholder="Search by tag">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+    <br>
+    <div class="blog-list">
+        <% blogs.forEach(blog => { %>
+            <div class="blog">
+                <h2 class="reader-title"><%= blog.blog_name %></h2>
+                <p class="author">By <%= blog.author_name %></p>
+                <br>
+                <ul>
+                    <% blog.articles.forEach(article => { %>
+                        <li>
+                            <h3><%= article.title %></h3>
+                            <p class="published">Published on <%= article.created_at %></p>
+                            <br>
+                            <p class="truncate"><%= truncateText(article.content, 200) %></p>
+                            <button type="button" onclick="window.location.href='/reader/increment-reads/<%= article.article_id %>'" class="read-button">Read More</button>
+                            <br><br>
+                            <p class="stats"><img src="/images/reads.png" alt="Reads" class="icon"> &nbsp;&nbsp;<%= article.reads %> Reads</p>
+                            <p class="stats"><img src="/images/likes.png" alt="Likes" class="icon"> &nbsp;&nbsp;<%= article.likes %> Likes</p>
+                            <br><br>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+        <% }); %>
+    </div>
+
+    <% function truncateText(text, maxLength) {
+        if (text.length <= maxLength) {
+            return text;
+        } else {
+            // Truncate to the nearest word boundary within maxLength characters
+            const truncated = text.slice(0, maxLength);
+            return truncated.slice(0, truncated.lastIndexOf(' ')) + '...';
+        }
+    } %>
+
+    <br><br>
+    <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">
+        <img src="/images/back-to-top.png" alt="Back to Top">
+    </button>
+
+    <script>
+        let backToTopBtn = document.getElementById("backToTopBtn");
+
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        }
+
+        function scrollToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+</body>
+</html>

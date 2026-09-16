@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Register</title>
+</head>
+<body>
+    <h1 class="login-title">Register</h1><br>
+    <form action="/users/register" method="post" class="center">
+        <p class="bold">Username: <br><input id="user" type="text" name="user_name" required/></p>
+        <br>
+        <p class="bold">Email: <br><input id="email" type="email" name="email_address" required/></p>
+        <br>
+        <p class="bold">Password: <br><input id="password" type="password" name="password" required/></p>
+        <br>
+        <p class="bold">Role: <br>
+            <select name="role">
+                <option disabled selected>Choose a role</option>
+                <option value="author">Author</option>
+                <option value="reader">Reader</option>
+            </select>
+        </p>
+        <br><br>
+        <button type="submit" class="bold register-button">Register</button>
+    </form>
+    <br>
+    <form action="/ %>" method="get" class="center">
+        <button type="submit"  style="margin-left: 0%;" class="flip-button">Back</button>
+    </form>
+    
+</body>
+</html>

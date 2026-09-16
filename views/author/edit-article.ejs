@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Edit Article</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const tagInput = document.getElementById('tag-input');
+            const tagContainer = document.getElementById('tag-container');
+            const tagsField = document.getElementById('tags');
+    
+            tagInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const tag = tagInput.value.trim();
+                    if (tag) {
+                        addTag(tag);
+                        tagInput.value = '';
+                    }
+                }
+            });
+    
+            function addTag(tag) {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.textContent = tag;
+    
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.className = 'remove-tag';
+                removeBtn.onclick = () => {
+                    tagContainer.removeChild(tagElement);
+                    updateTagsField();
+                };
+    
+                tagElement.appendChild(removeBtn);
+                tagContainer.appendChild(tagElement);
+                updateTagsField();
+            }
+    
+            function updateTagsField() {
+                const tags = [];
+                document.querySelectorAll('.tag').forEach(tagElement => {
+                    tags.push(tagElement.childNodes[0].textContent);
+                });
+                tagsField.value = tags.join(',');
+            }
+    
+            // Preload existing tags if editing an article
+            const existingTags = <%- JSON.stringify(tags) %>;
+            existingTags.forEach(tag => addTag(tag));
+        });
+    </script>
+</head>
+<header>
+    <div class="header">
+        <a href="/author/home">
+            <img src="/images/logo.png" alt="Logo" class="logo">
+        </a>
+    
+        <div class="header-right">
+            <p style="text-align: right; white-space: nowrap;">Hello, <%= username %></p>
+    
+            <div class="dropdown">
+                <button class="dropbtn">
+                    <img src="/images/menu-button.png" alt="Menu" class="menu-icon">
+                </button>
+    
+                <div class="dropdown-content">
+                    <a href="/author/settings" class="dropdown-item">Settings</a>
+                    <a href="/" class="dropdown-item">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <hr class="line">
+</header>
+<body>
+    <nav>
+        <form action="/author/home" method="get" class="inline">
+            <button type="submit" class="create-button">Home</button>
+        </form>
+        <form action="/author/create-blog" method="get" class="inline">
+            <button type="submit" class="create-button">Create New Blog</button>
+        </form>
+        <form action="/author/create-draft" method="get" class="inline">
+            <button type="submit" class="create-button">Create New Draft</button>
+        </form>
+        <form action="/author/draft-articles" method="get" class="inline">
+            <button type="submit" class="create-button">Draft Articles</button>
+        </form>
+    </nav>
+    <hr class="line">
+    <br>
+    <h1 class="center">Edit Article</h1>
+    <hr class="dotted-line"> 
+    <br><br>
+    <form action="/author/edit/<%= article.article_id %>" method="post" class="center">
+        <p class="bold">Blog:
+            <select name="blog_id" required>
+                <% blogs.forEach(blog => { %>
+                    <option value="<%= blog.blog_id %>"><%= blog.blog_name %></option>
+                <% }); %>
+            </select>
+        </p>
+        <label for="title" class="no-margin bold">Title:</label>
+        <input type="text" id="title" name="title" value="<%= article.title %>">
+        <br><br>
+
+        <label for="content" class="no-margin bold">Content:</label>
+        <br>
+        <textarea id="content" name="content" rows="15" cols="40" class="no-margin "><%= article.content %></textarea>
+        <br><br>
+
+        <div>
+            <label for="tags" class="bold">Tags:</label>
+            <input type="text" id="tag-input" placeholder="Enter a tag and press Enter" />
+            <br>
+            <div id="tag-container"></div>
+            <input type="hidden" name="tags" id="tags" />
+        </div>
+        <br><br>
+        <button type="submit" class="no-margin normal-button">Submit Changes</button>
+    </form>
+    <br><br>
+    <form action="/author/home %>" method="get" class="center">
+        <button type="submit" class="no-margin flip-button">Cancel</button>
+    </form>
+</body>
+</html>

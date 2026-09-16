@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Reader Home</title>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <a href="/reader/home">
+                <img src="/images/logo.png" alt="Logo" class="logo">
+            </a>
+        
+            <div class="header-right">
+                <p style="text-align: right; white-space: nowrap;">Hello, <%= username %></p>
+        
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <img src="/images/menu-button.png" alt="Menu" class="menu-icon">
+                    </button>
+        
+                    <div class="dropdown-content">
+                        <a href="/reader/settings" class="dropdown-item">Settings</a>
+                        <a href="/" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr class="line">
+    </header>
+    <br>
+    <h1>Search Results for "<%= searchTag %>"</h1>
+    <br>
+    <% if (articles.length > 0) { %>
+        <ul>
+            <% articles.forEach(article => { %>
+                <li>
+                    <a href="/reader/article/<%= article.article_id %>" class="reader-serach-title"><%= article.title %></a>
+                    <p class="truncate"><%= truncateText(article.content, 200) %></p>
+                    <br>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No articles found for the tag "<%= searchTag %>"</p>
+    <% } %>
+
+    <% function truncateText(text, maxLength) {
+        if (text.length <= maxLength) {
+            return text;
+        } else {
+            // Truncate to the nearest word boundary within maxLength characters
+            const truncated = text.slice(0, maxLength);
+            return truncated.slice(0, truncated.lastIndexOf(' ')) + '...';
+        }
+    } %>
+
+    <br>
+    <form action="/reader/home" method="get">
+        <button type="submit" class="flip-button margin">Back to Home</button>
+    </form>
+</body>
+</html>

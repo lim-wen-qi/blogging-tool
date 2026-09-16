@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Edit Reader Settings</title>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <a href="/reader/home">
+                <img src="/images/logo.png" alt="Logo" class="logo">
+            </a>
+        
+            <div class="header-right">
+                <p style="text-align: right; white-space: nowrap;">Hello, <%= username %></p>
+        
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <img src="/images/menu-button.png" alt="Menu" class="menu-icon">
+                    </button>
+        
+                    <div class="dropdown-content">
+                        <a href="/reader/settings" class="dropdown-item">Settings</a>
+                        <a href="/" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr class="line">
+    </header>
+
+    <br>
+    <h1 class="center">Edit Reader Settings</h1>
+    <br>
+    <form action="/reader/settings" method="post" class="center">
+        <h2 class="blog-title">Reader Details</h2>
+        <br>
+        <label for="username" class="bold">Current Username:</label>
+        <span><%= user.user_name %></span><br><br>
+
+        <label for="new_username" class="bold">New Username:</label><br>
+        <input type="text" id="new_username" name="new_username" value="<%= user.user_name %>"><br><br>
+        
+        <label for="new_password" class="bold">New Password:</label><br>
+        <input type="password" id="new_password" name="new_password">
+        <br><br><br>
+        <button type="submit" class="no-margin normal-button">Save Settings</button>
+    </form>
+    <br>
+    <form action="/reader/home" method="get" class="center">
+        <button type="submit" class="no-margin flip-button">Back to Home</button>
+    </form>
+</body>
+</html>

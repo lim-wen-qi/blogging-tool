@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Author Article</title>
+    <script>
+        function likeArticle(articleId) {
+            fetch(`/author/toggle-like/${articleId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload(); // Reload page after successful like/unlike
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <a href="/author/home">
+                <img src="/images/logo.png" alt="Logo" class="logo">
+            </a>
+        
+            <div class="header-right">
+                <p style="text-align: right; white-space: nowrap;">Hello, <%= username %></p>
+    
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <img src="/images/menu-button.png" alt="Menu" class="menu-icon">
+                    </button>
+    
+                    <div class="dropdown-content">
+                        <a href="/author/settings" class="dropdown-item">Settings</a>
+                        <a href="/" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr class="line">
+    </header>
+
+    <nav>
+        <form action="/author/home" method="get" class="inline">
+            <button type="submit" class="create-button">Home</button>
+        </form>
+        <form action="/author/create-blog" method="get" class="inline">
+            <button type="submit" class="create-button">Create New Blog</button>
+        </form>
+        <form action="/author/create-draft" method="get" class="inline">
+            <button type="submit" class="create-button">Create New Draft</button>
+        </form>
+        <form action="/author/draft-articles" method="get" class="inline">
+            <button type="submit" class="create-button">Draft Articles</button>
+        </form>
+    </nav>
+    <hr class="line">
+    <br>
+
+    <article>
+        <h1><%= article.blog_title %></h1>
+        <h2><%= article.title %></h2>
+        <br><br>
+        <p><span class="bold">By </span><%= authorName %></p>
+        <p><span class="bold">Published on: </span><%= article.published_at %></p>
+        <br>
+        <p><%= article.content %></p><br>
+        <p style="display: flex; align-items: center;"><img src="/images/reads.png" alt="Reads" class="icon"> &nbsp;&nbsp;<%= article.reads %></p>
+        <p style="display: flex; align-items: center;"><img src="/images/likes.png" alt="Likes" class="icon"> &nbsp;&nbsp;<%= article.likes %></p>
+        <br>
+
+        <button class="normal-button center-button" onclick="likeArticle('<%= article.article_id %>')">
+            <%= userHasLiked ? 'Unlike' : 'Like' %>
+        </button>
+        
+        <p style="display: flex; align-items: center;"><img src="/images/tag.png" alt="Reads" class="icon">&nbsp;&nbsp;
+            <% tags.forEach(tag => { %>
+                <span class="tag"><%= tag %></span>
+            <% }); %>
+
+        <br><br><br>
+        <h3>Comments</h3>
+        <div class="margin">
+            <ul>
+                <% comments.forEach(comment => { %>
+                    <li>
+                        <strong><%= comment.commenter_name %></strong> - <%= new Date(comment.created_at).toLocaleString() %><br>
+                        <%= comment.comment_text %>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+        <br><br>
+        <h3>Add a Comment</h3>
+        <div style="margin-top: 10px;" class="margin">
+            <form action="/author/comment/<%= article.article_id %>" method="post">
+                <input type="text" name="commenter_name" placeholder="Your Name" required>
+                <br>
+                <textarea name="comment_text" rows="4" cols="50" placeholder="Your Comment" style="margin-top: 10px;" required></textarea>
+                <br>
+                <button type="submit" class="normal-button no-margin" style="margin-top: 5px;" >Submit</button>
+            </form>
+            <br><br>
+            <form action="/author/home" method="get">
+                <button type="submit" class="flip-button no-margin">Back to Home</button>
+            </form>
+        </div>
+    </article>
+
+    <br><br><br>
+    <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">
+        <img src="/images/back-to-top.png" alt="Back to Top" class="back-to-top-icon">
+    </button>
+
+    <script>
+        // Get the button
+        let backToTopBtn = document.getElementById("backToTopBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function scrollToTop() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+    </script>
+
+</body>
+</html>

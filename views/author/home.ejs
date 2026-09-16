@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css">
+    <title>Author Home</title>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <a href="/author/home">
+                <img src="/images/logo.png" alt="Logo" class="logo">
+            </a>
+        
+            <div class="header-right">
+                <p style="text-align: right; white-space: nowrap;">Hello, <%= username %></p>
+        
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <img src="/images/menu-button.png" alt="Menu" class="menu-icon">
+                    </button>
+        
+                    <div class="dropdown-content">
+                        <a href="/author/settings" class="dropdown-item">Settings</a>
+                        <a href="/" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr class="line">
+    </header>
+
+    <nav>
+        <form action="/author/home" method="get" class="inline">
+            <button type="submit" class="create-button">Home</button>
+        </form>
+        <form action="/author/create-blog" method="get" class="inline">
+            <button type="submit" class="create-button">Create New Blog</button>
+        </form>
+        <form action="/author/create-draft" method="get" class="inline">
+            <button type="submit" class="create-button">Create New Draft</button>
+        </form>
+        <form action="/author/draft-articles" method="get" class="inline">
+            <button type="submit" class="create-button">Draft Articles</button>
+        </form>
+    </nav>
+    <hr class="line">
+    <h1 class="center" style="margin-top: 20px;">PUBLISHED ARTICLES</h1>
+    <br>
+
+    <% blogs.forEach(blog => { %>
+        <% if (blog.articles.some(article => article.state === 'published')) { %>
+            <h2 class="blog-title"><%= blog.blog_name %></h2><br>
+            <ul>
+                <% blog.articles.forEach(article => { %>
+                    <% if (article.state === 'published') { %>
+                        <li>
+                            <h3><%= article.title %></h3>
+                            <p class="truncate"><%= truncateText(article.content, 200) %></p>
+                            <button type="button" onclick="window.location.href='/author/increment-reads/<%= article.article_id %>'" class="read-button">Read More</button>
+                            <br><br>
+                            <p><span class="bold">Created:</span> <%= article.created_at %></p>
+                            <p><span class="bold">Last Modified:</span> <%= article.last_modified %></p>
+                            <br>
+                            <p style="display: flex; align-items: center;"><img src="/images/reads.png" alt="Reads" class="icon"> &nbsp;&nbsp;<%= article.reads %></p>
+                            <p style="display: flex; align-items: center;"><img src="/images/likes.png" alt="Likes" class="icon"> &nbsp;&nbsp;<%= article.likes %></p>
+                            <br><br>
+                            <form action="/author/edit/<%= article.article_id %>" method="get" style="display: inline;">
+                                <button type="submit" class="normal-button">Edit</button>
+                            </form>
+                            <form action="/author/unpublish/<%= article.article_id %>" method="post" style="display: inline;">
+                                <button type="submit" class="normal-button" style="margin-left: 8px;">Unpublish</button>
+                            </form>
+                            <form action="/author/delete/<%= article.article_id %>" method="post">
+                                <button type="submit" class="flip-button bold">Delete</button>
+                            </form>
+                        </li>
+                    <% } %>
+                <% }); %>
+            </ul>
+        <% } %>
+    <% }); %>
+    
+    <% function truncateText(text, maxLength) {
+        if (text.length <= maxLength) {
+            return text;
+        } else {
+            // Truncate to the nearest word boundary within maxLength characters
+            const truncated = text.slice(0, maxLength);
+            return truncated.slice(0, truncated.lastIndexOf(' ')) + '...';
+        }
+    } %>
+    
+    <br><br>
+    <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">
+        <img src="/images/back-to-top.png" alt="Back to Top">
+    </button>
+
+    <script>
+        let backToTopBtn = document.getElementById("backToTopBtn");
+
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        }
+
+        function scrollToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+</body>
+</html>

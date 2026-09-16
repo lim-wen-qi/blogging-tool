@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Reader Article</title>
+    <script>
+        function likeArticle(articleId) {
+            fetch(`/reader/toggle-like/${articleId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <a href="/reader/home">
+                <img src="/images/logo.png" alt="Logo" class="logo">
+            </a>
+        
+            <div class="header-right">
+                <p style="text-align: right; white-space: nowrap;">Hello, <%= username %></p>
+        
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <img src="/images/menu-button.png" alt="Menu" class="menu-icon">
+                    </button>
+        
+                    <div class="dropdown-content">
+                        <a href="/reader/settings" class="dropdown-item">Settings</a>
+                        <a href="/" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr class="line">
+    </header>
+    <br>
+    <div class="article-container">
+        <h1><%= article.blog_title %></h1>
+        <h2><%= article.title %></h2>
+        <br><br>
+        <p><span class="bold">By </span> <%= authorName %></p>
+        <p><span class="bold">Published on: </span> <%= article.published_at %></p>
+        <br>
+        <p><%= article.content %></p>
+        <br>
+        <div class="article-stats">
+            <p><img src="/images/reads.png" alt="Reads" class="icon"> &nbsp;&nbsp;<%= article.reads %> Reads</p>
+            <p><img src="/images/likes.png" alt="Likes" class="icon"> &nbsp;&nbsp;<%= article.likes %> Likes</p>
+        </div>
+        <br>
+        <button onclick="likeArticle('<%= article.article_id %>')" class="normal-button">
+            <%= userHasLiked ? 'Unlike' : 'Like' %>
+        </button>
+    </div>
+    <p style="display: flex; align-items: center;"><img src="/images/tag.png" alt="Reads" class="icon">&nbsp;&nbsp;
+        <% tags.forEach(tag => { %>
+            <span class="tag"><%= tag %></span>
+        <% }); %>
+
+    <br><br><br>
+    <div class="comments-section">
+        <h3>Comments</h3>
+        <ul class="margin ">
+            <% comments.forEach(comment => { %>
+                <li>
+                    <strong><%= comment.commenter_name %></strong> - <%= new Date(comment.created_at).toLocaleString() %>
+                    <br>
+                    <%= comment.comment_text %>
+                </li>
+            <% }); %>
+        </ul>
+        <br><br>
+        <h3>Add a Comment</h3>
+        <form action="/reader/comment/<%= article.article_id %>" method="post">
+            <input type="text" name="commenter_name" placeholder="Your Name" class="margin">
+            <br>
+            <textarea name="comment_text" rows="4" cols="50" placeholder="Your Comment" style="margin-top: 10px;" class="margin" required></textarea>
+            <br><br>
+            <button type="submit" class="normal-button">Submit</button>
+        </form>
+        <br><br>
+        <form action="/reader/home" method="get">
+            <button type="submit" class="margin flip-button" >Back to Home</button>
+        </form>
+    </div>
+
+    <br><br>
+    <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">
+        <img src="/images/back-to-top.png" alt="Back to Top" class="back-to-top-icon">
+    </button>
+
+    <script>
+        let backToTopBtn = document.getElementById("backToTopBtn");
+
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        }
+
+        function scrollToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+</body>
+</html>

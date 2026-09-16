@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Create Blog</title>
+</head>
+<header>
+    <div class="header">
+        <a href="/author/home">
+            <img src="/images/logo.png" alt="Logo" class="logo">
+        </a>
+    
+        <div class="header-right">
+            <p style="text-align: right; white-space: nowrap;">Hello, <%= username %></p>
+    
+            <div class="dropdown">
+                <button class="dropbtn">
+                    <img src="/images/menu-button.png" alt="Menu" class="menu-icon">
+                </button>
+    
+                <div class="dropdown-content">
+                    <a href="/author/settings" class="dropdown-item">Settings</a>
+                    <a href="/" class="dropdown-item">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <hr class="line">
+</header>
+<body>
+    <nav>
+        <form action="/author/home" method="get" class="inline">
+            <button type="submit" class="create-button">Home</button>
+        </form>
+        <form action="/author/create-blog" method="get" class="inline">
+            <button type="submit" class="create-button">Create New Blog</button>
+        </form>
+        <form action="/author/create-draft" method="get" class="inline">
+            <button type="submit" class="create-button">Create New Draft</button>
+        </form>
+        <form action="/author/draft-articles" method="get" class="inline">
+            <button type="submit" class="create-button">Draft Articles</button>
+        </form>
+    </nav>
+    <hr class="line">
+    <br>
+    <h1 class="center">Create a New Blog</h1>
+    <hr class="dotted-line">
+    <br><br>
+    
+    <form action="/author/create-blog" method="post" class="center">
+        <p class="bold">Author Name: <input type="hidden" name="authorName" value="<%= username %>"><%= username %></p>
+        <br>
+        <p class="bold">Blog Name: <input type="text" name="blogName" required></p>
+        <br>
+        <button type="submit" class="no-margin normal-button" >Create Blog</button>
+        <br><br>
+        <button type="button" onclick="window.location.href='/author/home';" class="no-margin flip-button">Cancel</button>
+        
+    </form>
+
+    
+</body>
+</html>
